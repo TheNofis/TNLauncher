@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from "react";
 import { launcher } from "@/api/launcher";
-import { Button, Chip, ConfirmDialog, Dialog, Dot, Icon, IconButton, Input, Meta, toast } from "@/components/ui";
+import { Button, Chip, ConfirmDialog, Dialog, Dot, Icon, IconButton, Input, Menu, Meta, toast } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { errorMessage, lastPlayed, LOADER_ICON, loaderLabel, playTime, plural } from "@/lib/format";
 import { useLauncher } from "@/store/LauncherContext";
@@ -112,16 +112,19 @@ export const InstanceRow = memo(function InstanceRow({ instance: i, groups, onOp
         <Button icon="play_arrow" loading={starting} disabled={running || busy} onClick={() => launch(i.id)}>
           {running ? "Running" : starting ? "Starting" : "Launch"}
         </Button>
-        <div className={s.group}>
-          <IconButton icon="terminal" label="Console" onClick={() => (select(i.id), navigate("console"))} />
-          <IconButton icon="widgets" label={`Manage ${i.name}`} title="Mods, resource packs and shaders" onClick={open} />
-          <IconButton icon="folder_open" label="Open folder" onClick={() => run(() => launcher.openInstanceDir(i.id))} />
-          {i.icon && <IconButton icon="hide_image" label="Reset icon" onClick={() => run(() => launcher.setInstanceIcon(i.id, ""))} />}
-          <IconButton icon="edit" label="Rename" onClick={() => setEditing(true)} />
-          <IconButton icon="content_copy" label="Copy instance" onClick={() => run(() => launcher.copyInstance(i.id).then((c) => toast(`Copied as ${c.name}`, "info", "content_copy")))} />
-          <IconButton icon="folder" label="Move to group" onClick={() => setGrouping(true)} />
-          <IconButton icon="delete" label="Delete" variant="danger" disabled={running} onClick={() => setConfirmDelete(true)} />
-        </div>
+        {running && <IconButton icon="terminal" label="Console" onClick={() => (select(i.id), navigate("console"))} />}
+        <Menu
+          label={`${i.name} actions`}
+          items={[
+            { icon: "folder_open", label: "Open folder", onSelect: () => run(() => launcher.openInstanceDir(i.id)) },
+            ...(running ? [] : [{ icon: "terminal", label: "Console", onSelect: () => (select(i.id), navigate("console")) }]),
+            { icon: "edit", label: "Rename", divide: true, onSelect: () => setEditing(true) },
+            { icon: "content_copy", label: "Duplicate", onSelect: () => run(() => launcher.copyInstance(i.id).then((c) => toast(`Copied as ${c.name}`, "info", "content_copy"))) },
+            { icon: "folder", label: "Move to group…", onSelect: () => setGrouping(true) },
+            ...(i.icon ? [{ icon: "hide_image", label: "Reset icon", onSelect: () => run(() => launcher.setInstanceIcon(i.id, "")) }] : []),
+            { icon: "delete", label: "Delete…", danger: true, divide: true, disabled: running, onSelect: () => setConfirmDelete(true) },
+          ]}
+        />
       </div>
 
       <GroupDialog

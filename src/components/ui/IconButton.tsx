@@ -1,9 +1,10 @@
-import type { ButtonHTMLAttributes } from "react";
+import type { ButtonHTMLAttributes, Ref } from "react";
 import { cx } from "@/lib/cx";
 import { Icon } from "./Icon";
 import s from "./IconButton.module.css";
 
 interface Props extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children"> {
+  ref?: Ref<HTMLButtonElement>;
   icon: string;
   /** Accessible name and tooltip. */
   label: string;

@@ -34,6 +34,18 @@
 .list li[aria-selected="true"]:not([data-active]) .check { color: var(--accent); }
 .hint { margin-left: auto; padding-left: 24px; color: var(--subtle); font-size: 11px; }
 .list li[data-active] .hint { color: rgb(255 255 255 / 0.72); }
+/* Action menu (Menu.tsx): anchored to the trigger's right edge. */
+.menu { transform-origin: top right; }
+.menu.up { transform-origin: bottom right; }
+.menu li { padding: 0 12px 0 10px; gap: 10px; }
+.menu li :global(.icon) { font-size: 16px; color: var(--muted); }
+.menu li[data-active] :global(.icon) { color: #fff; }
+.menu li[data-danger] { color: var(--critical); }
+.menu li[data-danger] :global(.icon) { color: currentColor; }
+.menu li[data-danger][data-active] { background: var(--critical-fill); color: #fff; }
+.menu li[aria-disabled] { opacity: 0.45; cursor: default; }
+.menu li[data-divide] { margin-top: 7px; position: relative; }
+.menu li[data-divide]::before { content: ""; position: absolute; top: -5px; left: 10px; right: 10px; height: 1px; background: var(--border); }
 @keyframes select-in { from { opacity: 0; transform: scale(0.94) translateY(-4px); } }
 @keyframes select-in-up { from { opacity: 0; transform: scale(0.94) translateY(4px); } }
 @media (prefers-reduced-motion: reduce) { .list { animation: none; } }
