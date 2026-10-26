@@ -1,0 +1,69 @@
+/* Plugins */
+.page { padding: 28px max(32px, (100% - 960px) / 2) 32px; display: flex; flex-direction: column; gap: 20px; background: var(--view); }
+.head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.head > div:first-child { display: flex; align-items: baseline; gap: 14px; }
+.head h1 { margin: 0; font-size: 26px; line-height: 32px; font-weight: 300; letter-spacing: -0.02em; }
+.count { font-size: 12px; color: var(--subtle); font-variant-numeric: tabular-nums; }
+.bad { color: var(--critical); }
+.actions { display: flex; gap: 8px; }
+
+.list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.plugin {
+  display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 16px; align-items: start;
+  padding: 16px; border-radius: var(--r-md);
+  background: var(--card); border: 1px solid var(--card-border); box-shadow: var(--highlight);
+  transition: background var(--soft) var(--butter), border-color var(--soft) var(--butter), box-shadow var(--soft) var(--butter);
+}
+.plugin:hover { background: var(--card-hover); border-color: var(--border); box-shadow: var(--highlight), var(--shadow-soft); }
+
+/* The tile carries the plugin's own icon, lit in accent while it runs. */
+.tile {
+  width: 44px; height: 44px; border-radius: var(--r-sm); display: grid; place-items: center;
+  background: rgb(10 132 255 / 0.14); border: 1px solid rgb(10 132 255 / 0.28); color: var(--link);
+  transition: background var(--soft) var(--butter), color var(--soft) var(--butter), border-color var(--soft) var(--butter);
+}
+.tile :global(.icon) { font-size: 22px; }
+.off .tile { background: rgb(255 255 255 / 0.04); border-color: var(--card-border); color: var(--subtle); }
+.off .desc, .off .perms { opacity: 0.7; }
+.failed { background: rgb(255 69 58 / 0.06); border-color: rgb(255 69 58 / 0.2); }
+.failed .tile { background: rgb(255 69 58 / 0.12); border-color: rgb(255 69 58 / 0.3); color: var(--critical); }
+
+.body { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.title { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; min-height: 22px; }
+.title strong { font-weight: 600; font-size: 15px; }
+.title :global(.mono) { font-size: 12px; }
+.tag { font-size: 11px; line-height: 16px; padding: 0 8px; border-radius: 999px; background: var(--btn); color: var(--muted); }
+.failed .tag { background: rgb(255 69 58 / 0.16); color: var(--critical); }
+.desc { margin: 0; color: var(--muted); max-width: 68ch; text-wrap: pretty; }
+
+.perms { list-style: none; margin: 2px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 14px; }
+.perms li { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: var(--subtle); }
+.perms :global(.icon) { font-size: 14px; }
+
+.reason { margin: 0; display: flex; align-items: center; gap: 6px; color: var(--critical); font-size: 12px; overflow-wrap: anywhere; }
+.reason :global(.icon) { font-size: 14px; flex-shrink: 0; }
+.controls { display: flex; align-items: center; gap: 8px; min-height: 44px; }
+
+/* Plugin's own fields, under a hairline inside its row. */
+.settings { margin-top: 10px; padding-top: 4px; border-top: 1px solid var(--card-border); display: flex; flex-direction: column; }
+.field { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 280px); gap: 16px; align-items: center; padding: 10px 0; }
+.field + .field { border-top: 1px solid var(--card-border); }
+.field > :global(*:last-child) { justify-self: end; }
+.field-label { display: flex; flex-direction: column; gap: 2px; }
+.field-label strong { font-weight: 500; }
+.field-label span { font-size: 12px; line-height: 16px; color: var(--subtle); }
+.input { width: 100%; }
+
+.error { margin: 0; display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: var(--r-sm); background: rgb(255 69 58 / 0.1); color: var(--critical); font-size: 13px; }
+.foot { margin: 4px 0 0; display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--subtle); }
+.foot :global(.icon) { font-size: 16px; flex-shrink: 0; }
+.foot code { color: var(--muted); }
+
+@media (max-width: 640px) {
+  .page { padding: 20px 16px; }
+  .plugin { grid-template-columns: 36px minmax(0, 1fr) auto; gap: 12px; }
+  .tile { width: 36px; height: 36px; }
+  .controls { min-height: 36px; }
+  .field { grid-template-columns: 1fr; }
+  .field > :global(*:last-child) { justify-self: stretch; }
+}

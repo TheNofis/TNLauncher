@@ -1,14 +1,10 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { View } from "@/components/layout/View";
-import { Button, ConfirmDialog, Icon, IconButton, Input, Select, Switch, Textarea } from "@/components/ui";
+import { Button, ConfirmDialog, Icon, Input, Select, Switch, Textarea } from "@/components/ui";
 import { useChanged } from "@/hooks/useChanged";
 import { cx } from "@/lib/cx";
 import { errorMessage } from "@/lib/format";
 import { useLauncher } from "@/store/LauncherContext";
-import { sources, type PluginEntry } from "@/api/sources";
-import { usePlugins } from "@/hooks/useSource";
-import { bumpPluginRevision, emitToPlugin, usePluginFailures } from "@/plugins/bridge";
 import type { Settings } from "@/types";
 import s from "./settings.module.css";
 
@@ -113,8 +109,6 @@ export function SettingsView() {
           </Row>
         </Group>
 
-        <PluginsGroup />
-
         <div className={s.settingsFoot}>
           {/* Keyed so each new save state lands with its own beat. */}
           <div key={status} className={cx(s.saveState, statusChanged && s.saveChanged, saving && s.saving, failed && s.saveFailed)} role="status">
@@ -138,156 +132,6 @@ export function SettingsView() {
         Memory, Java, window and launcher options go back to defaults.
       </ConfirmDialog>
     </View>
-  );
-}
-
-/** Bundled and user plugins; a turned-off content source disappears from the catalogs, installed files stay. */
-function PluginsGroup() {
-  const qc = useQueryClient();
-  const plugins = usePlugins();
-  const failures = usePluginFailures();
-  const [error, setError] = useState("");
-  const [reloading, setReloading] = useState(false);
-  const [removing, setRemoving] = useState<PluginEntry | null>(null);
-
-  const toggle = (id: string, enabled: boolean) =>
-    sources
-      .setPluginEnabled(id, enabled)
-      .then(() => setError(""), (e) => setError(errorMessage(e)))
-      .finally(() => qc.invalidateQueries());
-
-  const reload = () => {
-    setReloading(true);
-    sources
-      .reloadPlugins()
-      .then((list) => {
-        qc.setQueryData(["plugins"], list);
-        bumpPluginRevision();
-        setError("");
-      }, (e) => setError(errorMessage(e)))
-      .finally(() => {
-        setReloading(false);
-        void qc.invalidateQueries();
-      });
-  };
-
-  const remove = (p: PluginEntry) => {
-    sources
-      .removePlugin(p.id)
-      .then((list) => {
-        qc.setQueryData(["plugins"], list);
-        bumpPluginRevision();
-        setError("");
-      }, (e) => setError(errorMessage(e)))
-      .finally(() => qc.invalidateQueries());
-  };
-
-  return (
-    <Group icon="extension" title="Plugins" aside="Hot-reloadable from disk">
-      {plugins.data?.map((p) =>
-        p.error ? (
-          <Row key={`failed-${p.name}`} label={p.name} hint="Could not load this plugin.">
-            <span className={s.error}>{p.error}</span>
-          </Row>
-        ) : (
-          <Row
-            key={p.id}
-            label={`${p.name} ${p.version}${p.bundled ? "" : " · added by you"}`}
-            hint={[
-              p.description,
-              p.permissions.hosts.length ? `Connects to ${p.permissions.hosts.join(", ")}.` : "No network access.",
-              p.permissions.instances && "Reads your instances and when you play.",
-              p.permissions.presence && "Sets your Discord status.",
-              p.permissions.jvm && "Loads a Java agent into the game.",
-            ]
-              .filter(Boolean)
-              .join(" ")}
-          >
-            <div className={cx(s.settingControl, s.col)}>
-              <div className={cx(s.settingControl, s.end)}>
-                <Switch label={`${p.enabled ? "Turn off" : "Turn on"} ${p.name}`} checked={p.enabled} onChange={(on) => toggle(p.id, on)} />
-                {!p.bundled && (
-                  <IconButton icon="delete" label={`Delete ${p.name}`} variant="danger" onClick={() => setRemoving(p)} />
-                )}
-              </div>
-              {p.enabled && failures[p.id] && <span className={s.error}>Failed to start: {failures[p.id]}</span>}
-            </div>
-          </Row>
-        )
-      )}
-      {plugins.data?.map((p) =>
-        p.error || !p.settings.length ? null : (
-          <PluginSettings key={`settings-${p.id}`} plugin={p} onError={setError} />
-        )
-      )}
-      <Row label="Plugin folder" hint="Put a plugin's folder (manifest.json + its scripts) here and click Reload plugins.">
-        <div className={s.settingControl}>
-          <Button icon="refresh" loading={reloading} onClick={reload}>Reload plugins</Button>
-          <Button icon="folder_open" onClick={() => sources.openPluginsDir().catch((e) => setError(errorMessage(e)))}>Open folder</Button>
-        </div>
-      </Row>
-      {(error || plugins.error) && <span className={s.error}>{error || errorMessage(plugins.error)}</span>}
-
-      <ConfirmDialog
-        open={!!removing}
-        title={`Delete ${removing?.name}?`}
-        confirmLabel="Delete"
-        danger
-        onCancel={() => setRemoving(null)}
-        onConfirm={() => {
-          const target = removing!;
-          setRemoving(null);
-          remove(target);
-        }}
-      >
-        Removes the plugin folder and its stored plugin data from disk.
-      </ConfirmDialog>
-    </Group>
-  );
-}
-
-/** Fields a plugin declares (`contributes.settings`); text saves on blur, toggles and selects at once. */
-function PluginSettings({ plugin, onError }: { plugin: PluginEntry; onError(message: string): void }) {
-  const values = useQuery({ queryKey: ["plugin-settings", plugin.id], queryFn: () => sources.settings(plugin.id) });
-  const [draft, setDraft] = useState<Record<string, string>>({});
-  const save = (key: string, value: string | boolean) =>
-    sources.setSetting(plugin.id, key, value).then(
-      () => {
-        emitToPlugin(plugin.id, "settings-changed", { key, value });
-        return values.refetch();
-      },
-      (e) => onError(errorMessage(e))
-    );
-  if (!values.data) return null;
-  return (
-    <>
-      {plugin.settings.map((f) => (
-        <Row key={f.key} label={`${plugin.name}: ${f.label}`} hint={f.hint}>
-          <div className={s.settingControl}>
-            {f.type === "toggle" ? (
-              <Switch label={f.label} checked={values.data[f.key] === true} onChange={(on) => save(f.key, on)} />
-            ) : f.type === "select" ? (
-              <Select
-                label={f.label}
-                className={s.select}
-                value={String(values.data[f.key] ?? f.options?.[0]?.id ?? "")}
-                onChange={(v) => save(f.key, v)}
-                options={(f.options ?? []).map((o) => ({ value: o.id, label: o.label }))}
-              />
-            ) : (
-              <Input
-                type={f.type === "secret" ? "password" : "text"}
-                spellCheck={false}
-                aria-label={f.label}
-                value={draft[f.key] ?? String(values.data[f.key] ?? "")}
-                onChange={(e) => setDraft((d) => ({ ...d, [f.key]: e.target.value }))}
-                onBlur={() => draft[f.key] !== undefined && save(f.key, draft[f.key])}
-              />
-            )}
-          </div>
-        </Row>
-      ))}
-    </>
   );
 }
 

@@ -13,6 +13,7 @@ const NAV: { view: View; icon: string; label: string }[] = [
   { view: "instances", icon: "layers", label: "Instances" },
   { view: "modpacks", icon: "inventory_2", label: "Modpacks" },
   { view: "console", icon: "terminal", label: "Console" },
+  { view: "plugins", icon: "extension", label: "Plugins" },
   { view: "settings", icon: "tune", label: "Settings" },
 ];
 
@@ -21,8 +22,8 @@ function useNav(): typeof NAV {
   const pages: typeof NAV = (usePlugins().data ?? [])
     .filter((p) => p.enabled)
     .flatMap((p) => p.pages.map((pg) => ({ view: `plugin:${p.id}:${pg.id}` as View, icon: pg.icon, label: pg.title })));
-  // Plugin pages sit above Settings, which stays last.
-  return [...NAV.slice(0, -1), ...pages, NAV[NAV.length - 1]];
+  // Plugin pages sit above Plugins and Settings, which stay last.
+  return [...NAV.slice(0, -2), ...pages, ...NAV.slice(-2)];
 }
 
 /** Names a screen: its section, and its detail page (or nested sub-detail) if one is open. */
