@@ -14,7 +14,11 @@ use std::path::{Component, Path};
 const SDK: &str = include_str!("sdk.js");
 /// The launcher's look, so plugin pages can match it with plain HTML.
 const THEME: [&str; 2] = [include_str!("../../../src/styles/tokens.css"), include_str!("../../../src/styles/base.css")];
-const FONTS: &str = "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block";
+/// As in index.html: text swaps in its font, icons stay hidden until theirs arrives (no ligature words).
+const FONTS: [&str; 2] = [
+    "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap",
+    "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block",
+];
 /// Biggest response `tn.net.fetch` hands to a plugin.
 const MAX_RESPONSE: usize = 32 * 1024 * 1024;
 /// How the `plugin` scheme shows up per platform (custom scheme on Linux/macOS, http on Windows).
@@ -70,10 +74,13 @@ fn find_head_end(html: &str) -> Option<usize> {
 
 /// Where the SDK and theme go in the plugin HTML at `rel`. The frame's origin is opaque, so every load
 /// is cross-origin: WebKitGTK only serves CORS-mode requests from the custom scheme, hence `crossorigin`.
+/// The color-scheme meta comes first: until the frame's scheme matches the launcher's (dark), its canvas
+/// is painted opaque white, and the stylesheets that would set it wait on the network.
 fn inject(html: &str, rel: &str) -> String {
     let up = "../".repeat(rel.matches('/').count());
+    let [text, icons] = FONTS;
     let head = format!(
-        r#"<script src="{up}__tn/sdk.js" crossorigin></script><link rel="stylesheet" href="{FONTS}"><link rel="stylesheet" href="{up}__tn/theme.css" crossorigin>"#
+        r#"<meta name="color-scheme" content="dark"><script src="{up}__tn/sdk.js" crossorigin></script><link rel="stylesheet" href="{up}__tn/theme.css" crossorigin><link rel="stylesheet" href="{text}"><link rel="stylesheet" href="{icons}">"#
     );
     match find_head_end(html) {
         Some(i) => format!("{}{head}{}", &html[..i], &html[i..]),
@@ -369,10 +376,10 @@ mod tests {
     #[test]
     fn injects_sdk_into_head() {
         let out = inject("<!doctype html><HEAD lang=en><title>x</title></HEAD>", "ui/page.html");
-        assert!(out.starts_with(r#"<!doctype html><HEAD lang=en><script src="../__tn/sdk.js" crossorigin>"#), "{out}");
+        assert!(out.starts_with(r#"<!doctype html><HEAD lang=en><meta name="color-scheme" content="dark"><script src="../__tn/sdk.js" crossorigin>"#), "{out}");
         let with_header = inject("<header>top</header><head><title>x</title></head>", "page.html");
-        assert!(with_header.starts_with(r#"<header>top</header><head><script src="__tn/sdk.js" crossorigin>"#), "{with_header}");
-        assert!(inject("<p>hi</p>", "page.html").starts_with(r#"<script src="__tn/sdk.js" crossorigin>"#));
+        assert!(with_header.starts_with(r#"<header>top</header><head><meta name="color-scheme" content="dark"><script src="__tn/sdk.js" crossorigin>"#), "{with_header}");
+        assert!(inject("<p>hi</p>", "page.html").starts_with(r#"<meta name="color-scheme" content="dark"><script src="__tn/sdk.js" crossorigin>"#));
         assert!(inject("<p>hi</p>", "page.html").ends_with("<p>hi</p>"));
     }
 }
