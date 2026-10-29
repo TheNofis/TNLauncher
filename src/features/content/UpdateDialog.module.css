@@ -1,6 +1,6 @@
 .dialog { width: 600px; max-width: calc(100vw - 2 * var(--pad-panel)); }
 
-.all { display: inline-flex; align-items: center; gap: var(--space-sibling); font-size: 12px; color: var(--muted); cursor: pointer; user-select: none; }
+.all { display: inline-flex; align-items: center; align-self: center; gap: var(--space-sibling); font-size: 12px; color: var(--muted); cursor: pointer; user-select: none; }
 .all:hover { color: var(--fg); }
 
 .list {
