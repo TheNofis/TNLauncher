@@ -1,7 +1,15 @@
 @layer kit {
-.tabs { position: relative; display: flex; gap: 4px; border-bottom: 1px solid var(--card-border); margin-bottom: 20px; }
+.tabs {
+  position: relative; display: flex; gap: 4px; margin-bottom: 20px;
+  /* Scrolls instead of squeezing tabs; inset shadow, not a border, so the clipped scrollport keeps the underline. */
+  overflow-x: auto; scrollbar-width: none; box-shadow: inset 0 -1px var(--card-border);
+  --fade-l: 0px; --fade-r: 0px;
+  mask-image: linear-gradient(to right, transparent, #000 var(--fade-l), #000 calc(100% - var(--fade-r)), transparent);
+}
+.tabs[data-start] { --fade-l: 32px; }
+.tabs[data-end] { --fade-r: 32px; }
 .tab {
-  position: relative; display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px;
+  position: relative; display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; flex-shrink: 0; white-space: nowrap;
   font-size: 12px; font-weight: 500; color: var(--muted); transition: color var(--quick) var(--butter);
 }
 .tab:hover, .tab[aria-selected="true"] { color: var(--fg); }
@@ -9,6 +17,6 @@
 .tab :global(.icon) { font-size: 16px; color: var(--subtle); transition: color var(--quick) var(--butter); }
 .tab[aria-selected="true"] :global(.icon) { color: var(--accent); }
 .count { font-size: 11px; color: var(--subtle); }
-.line { position: absolute; left: 0; bottom: -1px; height: 2px; border-radius: 2px; background: var(--accent); pointer-events: none; }
+.line { position: absolute; left: 0; bottom: 0; height: 2px; border-radius: 2px; background: var(--accent); pointer-events: none; }
 .line[data-ready] { transition: left var(--soft) var(--spring), width var(--soft) var(--spring); }
 }
