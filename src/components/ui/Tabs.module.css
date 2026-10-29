@@ -1,6 +1,6 @@
 @layer kit {
 .tabs {
-  position: relative; display: flex; gap: 4px; margin-bottom: 20px;
+  position: relative; display: flex; gap: var(--space-glyph); margin-bottom: var(--space-section);
   /* Scrolls instead of squeezing tabs; inset shadow, not a border, so the clipped scrollport keeps the underline. */
   overflow-x: auto; scrollbar-width: none; box-shadow: inset 0 -1px var(--card-border);
   --fade-l: 0px; --fade-r: 0px;
@@ -9,7 +9,7 @@
 .tabs[data-start] { --fade-l: 32px; }
 .tabs[data-end] { --fade-r: 32px; }
 .tab {
-  position: relative; display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; flex-shrink: 0; white-space: nowrap;
+  position: relative; display: inline-flex; align-items: center; gap: var(--space-label); height: 36px; padding: 0 var(--pad-control); flex-shrink: 0; white-space: nowrap;
   font-size: 12px; font-weight: 500; color: var(--muted); transition: color var(--quick) var(--butter);
 }
 .tab:hover, .tab[aria-selected="true"] { color: var(--fg); }

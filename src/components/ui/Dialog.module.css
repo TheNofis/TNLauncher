@@ -12,9 +12,9 @@
 @keyframes dialog-in { from { opacity: 0; transform: translateY(16px) scale(0.95); } }
 @keyframes dialog-out { to { opacity: 0; transform: translateY(8px) scale(0.97); } }
 @keyframes backdrop-in { from { opacity: 0; backdrop-filter: blur(0); } }
-.form { display: flex; flex-direction: column; gap: 16px; padding: 20px; }
-.head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.form { display: flex; flex-direction: column; gap: var(--space-group); padding: var(--pad-dialog); }
+.head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-content); }
 .head h2 { margin: 0; font-size: 15px; font-weight: 600; }
-.actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }
+.actions { display: flex; justify-content: flex-end; gap: var(--space-sibling); margin-top: calc(var(--space-section) - var(--space-group)); }
 .text { margin: 0; color: var(--muted); }
 }

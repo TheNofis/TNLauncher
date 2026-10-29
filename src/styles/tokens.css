@@ -44,9 +44,43 @@
   /* Layered: a tight contact shadow plus a wide, low-opacity ambient one. */
   --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.22), 0 6px 18px -6px rgb(0 0 0 / 0.32);
   --shadow-raised: 0 2px 4px rgb(0 0 0 / 0.2), 0 14px 32px -10px rgb(0 0 0 / 0.5);
+  /* Spacing: a 4px grid with 2px and 6px half-steps. Pick by the relationship, never by the size.
+     Geometry tied to an element's own size (icon offsets, thumb travel, divider centering) stays literal. */
+  --space-unit: 2px;     /* lines of one unit: a name over its sub-line; rows inside one list surface */
+  --space-glyph: 4px;    /* a glyph beside its text; tight clusters of icon buttons, tabs, nav */
+  --space-label: 6px;    /* icon and label inside a control; a heading and its description; a label and its field */
+  --space-sibling: 8px;  /* siblings in one group: actions, stacked cards, toolbar items */
+  --space-content: 12px; /* contents of a card: media beside its text, blocks after a divider, tile grids */
+  --space-group: 16px;   /* groups inside a surface; panes of a split */
+  --space-section: 24px; /* sections of a page; page columns */
+  --space-region: 32px;  /* top-level regions of a form page */
+  --space-void: 48px;    /* breathing room around a lone message */
+
+  --pad-badge: 2px 6px;  /* static tags and counters */
+  --pad-chip: 4px 8px;   /* small interactive pills: crumbs, chips, tooltips */
+  --pad-control-sm: 8px; /* inline inset of 26px controls */
+  --pad-control: 12px;   /* inline inset of 28-32px fields, pills, tabs, list options */
+  --pad-button: 16px;
+  --pad-button-lg: 20px;
+  --pad-list: 6px;       /* list surfaces: r-md outer around r-sm rows stays concentric */
+  --pad-item: 8px;       /* a row that leads with an icon or thumbnail */
+  --pad-callout: 8px 12px; /* notes, callouts, text-only rows */
+  --pad-block: 12px 16px;  /* code blocks, toasts, captions */
+  --pad-card: 12px;      /* compact surfaces: toolbars, filters, rows, tiles, bars */
+  --pad-panel: 16px;     /* panes and side cards */
+  --pad-dialog: 20px;
+
   --sidebar-w: 64px;
-  /* Content column on wide windows; pages pad to it with max(gutter, (100% - --page-max) / 2) so backgrounds stay full-bleed. */
+  --dock-h: 72px;
+  /* Content column on wide windows; pages pad to it with --page-x so backgrounds stay full-bleed.
+     % resolves where the var is used, so --page-x works on any page-width element. */
   --page-max: 1320px;
+  --form-max: 960px;
+  --page-gutter: 24px;
+  --page-top: 24px;
+  --page-bottom: 32px;
+  --page-x: max(var(--page-gutter), (100% - var(--page-max)) / 2);
+  --form-x: max(var(--page-gutter), (100% - var(--form-max)) / 2);
   --mono: "JetBrains Mono", "JetBrainsMono Nerd Font", monospace;
   color-scheme: dark;
 }

@@ -1,19 +1,19 @@
-.dialog { width: min(620px, calc(100vw - 32px)); }
+.dialog { width: min(620px, calc(100vw - 2 * var(--pad-panel))); }
 
 /* Loader list on the left drives everything on the right, so it gets the column and the height. */
 /* minmax(0, …): long loader hints must truncate, not widen their column into the gap. */
-.body { display: grid; grid-template-columns: minmax(0, 236px) minmax(0, 1fr); gap: 24px; }
+.body { display: grid; grid-template-columns: minmax(0, 236px) minmax(0, 1fr); gap: var(--space-section); }
 .label { font-size: 12px; color: var(--muted); }
-.label-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 20px; }
-.field { display: flex; flex-direction: column; gap: 6px; }
+.label-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-sibling); min-height: 20px; }
+.field { display: flex; flex-direction: column; gap: var(--space-label); }
 /* Name level with the top of the loader list, versions level with its bottom. */
-.side { display: flex; flex-direction: column; justify-content: space-between; gap: 18px; padding: 5px 0 4px; }
-.versions { display: flex; flex-direction: column; gap: 18px; }
+.side { display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-group); padding: var(--pad-list) 0; }
+.versions { display: flex; flex-direction: column; gap: var(--space-group); }
 
-.loaders { display: flex; flex-direction: column; gap: 2px; min-width: 0; padding: 4px; border: 1px solid var(--card-border); border-radius: var(--r-md); background: rgb(0 0 0 / 0.14); }
-.loaders-label { padding: 4px 8px 6px; }
+.loaders { display: flex; flex-direction: column; gap: var(--space-unit); min-width: 0; padding: var(--pad-list); border: 1px solid var(--card-border); border-radius: var(--r-md); background: rgb(0 0 0 / 0.14); }
+.loaders-label { padding: var(--space-glyph) var(--pad-item) var(--space-label); }
 .loader {
-  display: flex; align-items: center; gap: 10px; padding: 7px 8px; border-radius: var(--r-sm); cursor: pointer;
+  display: flex; align-items: center; gap: var(--space-content); padding: var(--pad-item); border-radius: var(--r-sm); cursor: pointer;
   transition: background var(--quick) var(--butter), transform var(--soft) var(--spring);
 }
 .loader:hover { background: var(--card); }
@@ -28,15 +28,15 @@
 }
 .loader-icon :global(.icon) { font-size: 18px; }
 .loader:has(input:checked) .loader-icon { background: var(--accent-fill); color: #fff; }
-.loader-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.loader-text { display: flex; flex-direction: column; gap: var(--space-unit); min-width: 0; }
 .loader-name { font-size: 13px; font-weight: 500; color: var(--fg); }
 .loader-hint { font-size: 11px; color: var(--subtle); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .loader:has(input:checked) .loader-hint { color: var(--muted); }
 
-.snap { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); cursor: pointer; }
+.snap { display: inline-flex; align-items: center; gap: var(--space-sibling); font-size: 12px; color: var(--muted); cursor: pointer; }
 
 /* Fixed height: switching loaders swaps the message without nudging the form. */
-.status { display: flex; align-items: center; gap: 6px; min-height: 18px; margin: 0; font-size: 12px; color: var(--subtle); }
+.status { display: flex; align-items: center; gap: var(--space-label); min-height: 18px; margin: 0; font-size: 12px; color: var(--subtle); }
 .status :global(.icon) { font-size: 15px; flex-shrink: 0; }
 .status[data-tone="ok"] { color: var(--muted); }
 .status[data-tone="ok"] :global(.icon) { color: var(--green); }

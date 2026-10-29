@@ -1,2 +1,2 @@
 .view { min-height: 100%; }
-.dock { padding-bottom: 96px; }
+.dock { padding-bottom: calc(var(--dock-h) + var(--space-section)); }

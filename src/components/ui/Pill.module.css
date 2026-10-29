@@ -1,9 +1,9 @@
 @layer kit {
-.group { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+.group { display: flex; gap: var(--space-label); overflow-x: auto; scrollbar-width: none; }
 .group::-webkit-scrollbar { display: none; }
 .wrap { flex-wrap: wrap; overflow: visible; }
 .pill {
-  height: 28px; padding: 0 12px; border-radius: 999px; display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;
+  height: 28px; padding: 0 var(--pad-control); border-radius: 999px; display: inline-flex; align-items: center; gap: var(--space-label); flex-shrink: 0;
   background: var(--btn); color: var(--muted); font-size: 12px; white-space: nowrap;
   transition: background var(--quick) var(--butter), color var(--quick) var(--butter), transform var(--soft) var(--spring);
 }

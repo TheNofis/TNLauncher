@@ -1,8 +1,8 @@
 @layer kit {
 .select {
   height: 32px; border-radius: var(--r-sm); min-width: 0;
-  display: inline-flex; align-items: center; justify-content: space-between; gap: 8px;
-  padding: 0 8px 0 12px; text-align: left; font-size: 12px; font-weight: 500;
+  display: inline-flex; align-items: center; justify-content: space-between; gap: var(--space-sibling);
+  padding: 0 var(--space-sibling) 0 var(--pad-control); text-align: left; font-size: 12px; font-weight: 500;
   background: var(--card); border: 1px solid var(--border); box-shadow: var(--highlight);
   transition: border-color var(--quick) var(--butter), background var(--quick) var(--butter);
 }
@@ -16,8 +16,8 @@
 .placeholder { color: var(--subtle); }
 
 .list {
-  position: fixed; z-index: 100; margin: 0; padding: 6px; list-style: none;
-  display: flex; flex-direction: column; gap: 2px;
+  position: fixed; z-index: 100; margin: 0; padding: var(--pad-list); list-style: none;
+  display: flex; flex-direction: column; gap: var(--space-unit);
   max-width: 360px; overflow-y: auto; overscroll-behavior: contain;
   border-radius: 16px; background: var(--popover); border: 1px solid var(--border);
   box-shadow: var(--shadow-raised), var(--highlight); font-size: 12px;
@@ -25,27 +25,26 @@
 }
 .up { transform-origin: bottom center; animation-name: select-in-up; }
 .list li {
-  display: flex; align-items: center; gap: 8px; min-height: 32px; flex-shrink: 0; padding: 0 12px 0 8px;
+  display: flex; align-items: center; gap: var(--space-sibling); min-height: 32px; flex-shrink: 0; padding: 0 var(--pad-control) 0 var(--space-sibling);
   border-radius: 10px; white-space: nowrap; cursor: pointer; transition: background var(--press) var(--butter);
 }
 .list li[data-active] { background: var(--accent-fill); color: #fff; }
 .check { font-size: 15px; visibility: hidden; }
 .list li[aria-selected="true"] .check { visibility: visible; }
 .list li[aria-selected="true"]:not([data-active]) .check { color: var(--accent); }
-.hint { margin-left: auto; padding-left: 24px; color: var(--subtle); font-size: 11px; }
+.hint { margin-left: auto; padding-left: var(--space-section); color: var(--subtle); font-size: 11px; }
 .list li[data-active] .hint { color: rgb(255 255 255 / 0.72); }
 /* Action menu (Menu.tsx): anchored to the trigger's right edge. */
 .menu { transform-origin: top right; }
 .menu.up { transform-origin: bottom right; }
-.menu li { padding: 0 12px 0 10px; gap: 10px; }
 .menu li :global(.icon) { font-size: 16px; color: var(--muted); }
 .menu li[data-active] :global(.icon) { color: #fff; }
 .menu li[data-danger] { color: var(--critical); }
 .menu li[data-danger] :global(.icon) { color: currentColor; }
 .menu li[data-danger][data-active] { background: var(--critical-fill); color: #fff; }
 .menu li[aria-disabled] { opacity: 0.45; cursor: default; }
-.menu li[data-divide] { margin-top: 7px; position: relative; }
-.menu li[data-divide]::before { content: ""; position: absolute; top: -5px; left: 10px; right: 10px; height: 1px; background: var(--border); }
+.menu li[data-divide] { margin-top: var(--space-sibling); position: relative; }
+.menu li[data-divide]::before { content: ""; position: absolute; top: calc((var(--space-unit) + var(--space-sibling)) / -2); left: var(--space-sibling); right: var(--space-sibling); height: 1px; background: var(--border); }
 @keyframes select-in { from { opacity: 0; transform: scale(0.94) translateY(-4px); } }
 @keyframes select-in-up { from { opacity: 0; transform: scale(0.94) translateY(4px); } }
 @media (prefers-reduced-motion: reduce) { .list { animation: none; } }

@@ -1,13 +1,13 @@
 .pane {
-  display: flex; flex-direction: column; gap: 10px; padding: 14px; min-height: 440px;
+  display: flex; flex-direction: column; gap: var(--space-content); padding: var(--pad-panel); min-height: 440px;
   border-radius: 18px; background: var(--window); border: 1px solid var(--card-border); box-shadow: var(--highlight);
 }
-.head { display: flex; align-items: center; gap: 8px; min-height: 32px; }
+.head { display: flex; align-items: center; gap: var(--space-sibling); min-height: 32px; }
 .head h3 { margin: 0; font-size: 13px; font-weight: 600; }
 .head :global(.mono) { font-size: 11px; color: var(--subtle); }
 .folder { margin-left: auto; }
 
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--space-content); }
 .thumb {
   aspect-ratio: 16 / 9; padding: 0; border-radius: 12px; overflow: hidden; cursor: zoom-in;
   background: rgb(255 255 255 / 0.05); border: 1px solid var(--card-border);
@@ -19,6 +19,6 @@
 
 .viewer { width: min(92vw, 1400px); max-width: none; background: #000; overflow: hidden; }
 .viewer > img { display: block; width: 100%; max-height: calc(92vh - 64px); object-fit: contain; }
-.bar { display: flex; align-items: center; gap: 8px; padding: 12px; background: var(--popover); }
-.caption { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; font-size: 12px; color: var(--muted); }
+.bar { display: flex; align-items: center; gap: var(--space-sibling); padding: var(--pad-card); background: var(--popover); }
+.caption { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--space-unit); font-size: 12px; color: var(--muted); }
 .caption b { color: var(--fg); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

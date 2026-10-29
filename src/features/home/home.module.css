@@ -1,6 +1,6 @@
 .home { background: var(--window); }
 
-.hero { position: relative; height: clamp(220px, 36vh, 440px); display: flex; flex-direction: column; justify-content: flex-end; padding: 0 max(28px, (100% - var(--page-max)) / 2) 24px; overflow: hidden; }
+.hero { position: relative; height: clamp(220px, 36vh, 440px); display: flex; flex-direction: column; justify-content: flex-end; padding: 0 var(--page-x) var(--space-section); overflow: hidden; }
 .hero-bg { position: absolute; inset: 0; background: url("@/assets/hero.jpg") center / cover; filter: saturate(0.7); }
 /* Only when the selected instance changes, never on opening Home. */
 .restage .hero-bg { animation: hero-bg 900ms var(--butter) backwards; }
@@ -13,14 +13,14 @@
 .hero::before, .hero::after { content: ""; position: absolute; inset: 0; z-index: 1; }
 .hero::before { background: linear-gradient(to top, var(--window), rgb(28 28 30 / 0.8) 45%, transparent); }
 .hero::after { background: linear-gradient(to right, rgb(28 28 30 / 0.9), rgb(28 28 30 / 0.5) 50%, transparent); }
-.hero-body { position: relative; z-index: 2; display: flex; flex-direction: column; gap: 6px; max-width: 640px; }
-.hero-cta { margin-top: 8px; }
+.hero-body { position: relative; z-index: 2; display: flex; flex-direction: column; gap: var(--space-label); max-width: 640px; }
+.hero-cta { margin-top: var(--space-sibling); }
 .hero h1 { margin: 0; font-size: 26px; line-height: 32px; font-weight: 300; letter-spacing: -0.02em; }
 
-.section { padding: 16px max(28px, (100% - var(--page-max)) / 2) 8px; }
-.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.section { padding: var(--space-group) var(--page-x) var(--space-sibling); }
+.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-content); }
 .tile {
-  display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 16px; text-align: left;
+  display: flex; align-items: center; gap: var(--space-content); padding: var(--pad-card); border-radius: 16px; text-align: left;
   background: rgb(99 99 102 / 0.1); border: 1px solid var(--card-border); box-shadow: var(--highlight);
   transition: background var(--soft) var(--butter), border-color var(--soft) var(--butter), box-shadow var(--soft) var(--butter), transform var(--soft) var(--spring); min-width: 0;
 }
@@ -39,27 +39,27 @@
 .add:hover .tile-icon :global(.icon) { transform: rotate(90deg); }
 .tile-text { min-width: 0; flex: 1; }
 .tile-name { display: block; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.tile-sub { display: block; font-size: 11px; color: var(--muted); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tile-sub { display: block; font-size: 11px; color: var(--muted); margin-top: var(--space-unit); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .add { border-style: dashed; background: rgb(255 255 255 / 0.02); }
 
 .news { border-radius: 16px; background: rgb(99 99 102 / 0.08); border: 1px solid var(--card-border); box-shadow: var(--highlight); overflow: hidden; }
-.news-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 16px; color: var(--muted); }
+.news-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-group); padding: var(--pad-callout); color: var(--muted); }
 .news-row + .news-row { border-top: 1px solid rgb(255 255 255 / 0.06); }
 .news-row:first-child { color: var(--fg); }
-.news-title { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.news-title { display: flex; align-items: center; gap: var(--space-sibling); min-width: 0; }
 .news-title span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .dock {
-  position: fixed; left: var(--sidebar-w); right: 0; bottom: 0; height: 72px; z-index: 40;
+  position: fixed; left: var(--sidebar-w); right: 0; bottom: 0; height: var(--dock-h); z-index: 40;
   background: var(--lowest); border-top: 1px solid var(--card-border); box-shadow: var(--highlight);
-  display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 max(28px, var(--edge)) 0 max(20px, var(--edge) - 8px);
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-section); padding: 0 max(var(--page-gutter), var(--edge)) 0 calc(max(var(--page-gutter), var(--edge)) - var(--space-label));
   /* Fixed, so % would be the viewport: line the dock up with the page column by hand. */
   --edge: (100vw - var(--sidebar-w) - var(--page-max)) / 2;
 }
-.dock-left { flex: 1 1 auto; display: flex; align-items: center; gap: 8px; min-width: 0; }
-.dock-right { flex: 0 1 auto; display: flex; align-items: center; justify-content: flex-end; gap: 16px; min-width: 0; }
+.dock-left { flex: 1 1 auto; display: flex; align-items: center; gap: var(--space-sibling); min-width: 0; }
+.dock-right { flex: 0 1 auto; display: flex; align-items: center; justify-content: flex-end; gap: var(--space-group); min-width: 0; }
 
-.card { height: 48px; max-width: 320px; padding: 0 12px 0 6px; gap: 10px; background-color: transparent; border-color: transparent; box-shadow: none; }
+.card { height: 48px; max-width: 320px; padding: 0 var(--pad-control) 0 var(--space-label); gap: var(--space-sibling); background-color: transparent; border-color: transparent; box-shadow: none; }
 .card-icon { width: 36px; height: 36px; border-radius: 10px; background: rgb(255 255 255 / 0.06); display: grid; place-items: center; flex-shrink: 0; overflow: hidden; }
 .card-icon img { width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; }
 .card-icon :global(.icon) { font-size: 20px; color: var(--muted); }
@@ -70,14 +70,14 @@
 .status { min-width: 0; font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 /* The button already shows the stage; keep it for screen readers only. */
 .status-sr { position: absolute; width: 1px; height: 1px; clip-path: inset(50%); }
-.failure { display: flex; align-items: center; gap: 6px; min-width: 0; max-width: 440px; animation: failure-in 420ms var(--ease); }
+.failure { display: flex; align-items: center; gap: var(--space-sibling); min-width: 0; max-width: 440px; animation: failure-in 420ms var(--ease); }
 @keyframes failure-in {
   0% { opacity: 0; transform: translateY(6px); }
   35% { opacity: 1; transform: translateX(-4px); }
   60% { transform: translateX(3px); }
   80% { transform: translateX(-1px); }
 }
-.failure-icon { color: var(--critical); flex-shrink: 0; font-size: 18px; margin-right: 2px; }
+.failure-icon { color: var(--critical); flex-shrink: 0; font-size: 18px; }
 .failure-text {
   min-width: 0; flex: 1; font-size: 12px; line-height: 16px; color: var(--fg);
   display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
@@ -93,7 +93,7 @@
 .play-ready:hover :global(.icon) { transform: translateX(2px) scale(1.1); }
 
 /* In game: a steady heartbeat next to the status. */
-.live { display: inline-flex; align-items: center; gap: 8px; color: var(--green); font-weight: 500; overflow: visible; }
+.live { display: inline-flex; align-items: center; gap: var(--space-sibling); color: var(--green); font-weight: 500; overflow: visible; }
 .live::before {
   content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--green); flex-shrink: 0;
   box-shadow: 0 0 0 0 rgb(48 209 88 / 0.5); animation: live 1.8s ease-out infinite;

@@ -14,14 +14,14 @@
 .md img { max-width: 100%; height: auto; border-radius: 8px; vertical-align: middle; }
 .md a img { border-radius: 4px; }
 .md hr { border: 0; border-top: 1px solid var(--card-border); margin: 1.6em 0; }
-.md blockquote { padding: 8px 14px; border-radius: 8px; background: var(--card); color: var(--muted); }
+.md blockquote { padding: var(--pad-callout); border-radius: 8px; background: var(--card); color: var(--muted); }
 .md code { font-family: var(--mono); font-size: 0.88em; padding: 1px 5px; border-radius: 4px; background: rgb(255 255 255 / 0.08); }
-.md pre { padding: 12px 14px; border-radius: 8px; background: var(--lowest); overflow-x: auto; }
+.md pre { padding: var(--pad-block); border-radius: 8px; background: var(--lowest); overflow-x: auto; }
 .md pre code { padding: 0; background: none; }
 .md table { border-collapse: collapse; display: block; overflow-x: auto; font-size: 12px; }
-.md th, .md td { padding: 6px 10px; border: 1px solid var(--card-border); text-align: left; }
+.md th, .md td { padding: var(--space-label) var(--space-content); border: 1px solid var(--card-border); text-align: left; }
 .md th { background: var(--card); font-weight: 600; }
-.md details { margin: 0 0 1em; padding: 8px 12px; border-radius: 8px; background: var(--card); }
+.md details { margin: 0 0 1em; padding: var(--pad-callout); border-radius: 8px; background: var(--card); }
 .md summary { cursor: pointer; font-weight: 500; }
 .md center { display: block; text-align: center; }
 .md ::selection { background: rgb(10 132 255 / 0.35); }

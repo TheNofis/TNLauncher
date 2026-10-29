@@ -2,9 +2,9 @@
   position: fixed; inset: 0 auto 0 0; width: var(--sidebar-w); z-index: 50;
   background: var(--sidebar); border-right: 1px solid var(--card-border);
   display: flex; flex-direction: column; align-items: center; justify-content: space-between;
-  padding: 12px 0;
+  padding: var(--pad-card) 0;
 }
-.sidebar nav { position: relative; display: flex; flex-direction: column; gap: 4px; margin-top: 12px; }
+.sidebar nav { position: relative; display: flex; flex-direction: column; gap: var(--space-glyph); margin-top: var(--space-content); }
 /* 44px step = 40px button + 4px gap. `top` (not `transform`): WebKitGTK's Skia compositor flashes
    a layer's pre-transition `m_transform` for one frame when a `transform` transition ends (webkit.org/b/321993). */
 .indicator {
@@ -31,7 +31,7 @@
 .nav-btn[aria-current="page"] :global(.icon) { animation: nav-pop var(--slow) var(--spring); }
 @keyframes nav-pop { from { transform: scale(0.84); } }
 .tip {
-  position: absolute; left: 56px; padding: 4px 10px; border-radius: 6px;
+  position: absolute; left: 56px; padding: var(--pad-chip); border-radius: 6px;
   background: var(--popover); border: 1px solid var(--border); box-shadow: var(--lift);
   font-size: 11px; font-weight: 500; color: var(--fg); white-space: nowrap;
   opacity: 0; transform: translateX(-6px) scale(0.96); transform-origin: left center; pointer-events: none; transition: opacity var(--quick) var(--butter), transform var(--soft) var(--spring);
