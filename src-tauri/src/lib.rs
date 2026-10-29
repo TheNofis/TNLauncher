@@ -22,13 +22,6 @@ use tauri::{Emitter, Manager};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    // WebKitGTK's DMABUF renderer shows a stale frame when an opacity/transform/filter animation
-    // or transition ends, so every animation flashes its start state. Keep a user's own setting.
-    #[cfg(target_os = "linux")]
-    if std::env::var_os("WEBKIT_DISABLE_DMABUF_RENDERER").is_none() {
-        // SAFETY: runs first in `run`, before Tauri or WebKit start any threads.
-        unsafe { std::env::set_var("WEBKIT_DISABLE_DMABUF_RENDERER", "1") };
-    }
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())
@@ -102,6 +95,8 @@ pub fn run() {
             commands::game::launch,
             commands::game::stop_game,
             commands::game::read_game_log,
+            commands::game::read_crash_report,
+            commands::game::share_log,
             commands::mods::list_content,
             commands::mods::identify_content,
             commands::mods::toggle_content,
