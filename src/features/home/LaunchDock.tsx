@@ -23,9 +23,9 @@ export function LaunchDock() {
 function DockInstance() {
   const inst = useSelectedInstance();
   const select = useLauncher((st) => st.select);
-  const ramMb = useLauncher((st) => st.snapshot?.settings.ramMb ?? 0);
+  const globalRam = useLauncher((st) => st.snapshot?.settings.ramMb ?? 0);
   const instances = useRecentInstances();
-  const ramGb = +(ramMb / 1024).toFixed(1);
+  const ramGb = +((inst?.settings.ramMb ?? globalRam) / 1024).toFixed(1);
   if (!inst) return <div className={s.dockLeft} />;
   return (
     <div className={s.dockLeft}>

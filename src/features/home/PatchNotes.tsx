@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getPatchNotes, type PatchNote } from "@/api/mojang";
-import { Dot, SectionHead, Skeleton } from "@/components/ui";
+import { SectionHead, Skeleton } from "@/components/ui";
 import s from "./home.module.css";
 
 export function PatchNotes() {
@@ -8,28 +8,28 @@ export function PatchNotes() {
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
-    getPatchNotes().then(setNotes, () => setFailed(true));
+    getPatchNotes(6).then(setNotes, () => setFailed(true));
   }, []);
 
   return (
-    <div className={s.section}>
-      <SectionHead title="Minecraft patch notes" />
-      <div className={s.news}>
-        {failed ? (
-          <div className={s.newsRow}><div className={s.newsTitle}><Dot className={s.newsDot} /><span>Patch notes are unavailable offline.</span></div></div>
-        ) : !notes ? (
-          <Skeleton height={120} />
-        ) : (
-          notes.map((n) => (
-            <div className={s.newsRow} key={n.version}>
-              <div className={s.newsTitle}><Dot className={s.newsDot} /><span>{n.title}</span></div>
-              <span className="mono subtle">
-                {new Date(n.date).toLocaleDateString(undefined, { month: "short", day: "2-digit", year: "numeric" })}
-              </span>
-            </div>
-          ))
-        )}
-      </div>
+    <div className={`${s.cell} ${s.pane} ${s.newsPane}`}>
+      <SectionHead title="Patch notes" />
+      {failed ? (
+        <p className={s.newsEmpty}>Patch notes are unavailable offline.</p>
+      ) : !notes ? (
+        <div className={s.news}>{Array.from({ length: 3 }, (_, i) => <Skeleton key={i} height={36} />)}</div>
+      ) : (
+        <ol className={s.news}>
+          {notes.map((n) => (
+            <li key={n.version}>
+              <span>{n.title.replace(/^Minecraft:? Java Edition /i, "")}</span>
+              <time className={s.newsDate} dateTime={n.date}>
+                {new Date(n.date).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}
+              </time>
+            </li>
+          ))}
+        </ol>
+      )}
     </div>
   );
 }

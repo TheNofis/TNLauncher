@@ -1,21 +1,108 @@
 .home { background: var(--window); }
 
-.hero { position: relative; height: clamp(220px, 36vh, 440px); display: flex; flex-direction: column; justify-content: flex-end; padding: 0 var(--page-x) var(--space-section); overflow: hidden; }
-.hero-bg { position: absolute; inset: 0; background: url("@/assets/hero.jpg") center / cover; filter: saturate(0.7); }
-/* Only when the selected instance changes, never on opening Home. */
-.restage .hero-bg { animation: hero-bg 900ms var(--butter) backwards; }
-.restage .hero-body > * { animation: hero-rise var(--slow) var(--butter) backwards; }
-.restage .hero-body > :nth-child(2) { animation-delay: 60ms; }
-.restage .hero-body > :nth-child(3) { animation-delay: 120ms; }
-/* The scene settles out of a slight push-in and a brighter exposure. */
-@keyframes hero-bg { from { transform: scale(1.04); filter: saturate(0.85) brightness(1.08); } }
-@keyframes hero-rise { from { opacity: 0; transform: translateY(14px); clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 -20% 0); } }
-.hero::before, .hero::after { content: ""; position: absolute; inset: 0; z-index: 1; }
-.hero::before { background: linear-gradient(to top, var(--window), rgb(28 28 30 / 0.8) 45%, transparent); }
-.hero::after { background: linear-gradient(to right, rgb(28 28 30 / 0.9), rgb(28 28 30 / 0.5) 50%, transparent); }
-.hero-body { position: relative; z-index: 2; display: flex; flex-direction: column; gap: var(--space-label); max-width: 640px; }
-.hero-cta { margin-top: var(--space-sibling); }
-.hero h1 { margin: 0; font-size: 26px; line-height: 32px; font-weight: 300; letter-spacing: -0.02em; }
+/* Bento: one 12-col grid of live facts about the armed instance. */
+.bento {
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--space-content);
+  padding: var(--page-top) var(--page-x) 0;
+}
+.cell {
+  position: relative; isolation: isolate; min-width: 0; border-radius: var(--r-md); overflow: hidden;
+  background: rgb(99 99 102 / 0.08); border: 1px solid var(--card-border); box-shadow: var(--highlight);
+}
+.pane { padding: var(--pad-panel); display: flex; flex-direction: column; }
+.stage { grid-column: span 8; min-height: clamp(240px, 32vh, 340px); background: var(--lowest); }
+.player { grid-column: span 4; }
+.worlds-pane { grid-column: span 5; }
+.spec-pane { grid-column: span 4; }
+.news-pane { grid-column: span 3; }
+/* Without an instance only the patch notes follow the stage: give them the row. */
+.stage + .player + .news-pane { grid-column: span 12; }
+
+/* Stage: the newest screenshot, held back by graphite so the name stays legible. */
+.stage-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: saturate(0.75); animation: stage-in var(--slow) var(--butter); }
+@keyframes stage-in { from { opacity: 0; } }
+.stage::before, .stage::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.stage::before { background: linear-gradient(to top, rgb(18 18 20 / 0.92), rgb(18 18 20 / 0.55) 40%, transparent 75%); }
+.stage::after { background: linear-gradient(to right, rgb(18 18 20 / 0.7), transparent 60%); }
+.stage-top { position: absolute; top: var(--space-content); right: var(--space-content); z-index: 2; display: flex; align-items: center; gap: var(--space-sibling); }
+.stage-top .live { height: 26px; padding: 0 var(--pad-control); border-radius: 999px; background: rgb(0 0 0 / 0.45); font-size: 12px; }
+.stage-body {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: var(--pad-dialog);
+  display: flex; flex-direction: column; gap: var(--space-label); max-width: 640px;
+}
+.stage-body h1 { margin: var(--space-label) 0 0; font-size: 26px; line-height: 32px; font-weight: 300; letter-spacing: -0.02em; text-wrap: balance; overflow-wrap: anywhere; }
+.stage-icon {
+  width: 44px; height: 44px; border-radius: var(--r-sm); display: grid; place-items: center; overflow: hidden;
+  background: rgb(255 255 255 / 0.1); box-shadow: var(--highlight), var(--shadow-soft); color: var(--icon);
+}
+.stage-icon img { width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; }
+.stage-icon :global(.icon) { font-size: 22px; }
+.stage-cta { margin-top: var(--space-sibling); }
+
+/* Player: the skin turntable stands on a soft floor shadow. */
+.player { display: flex; flex-direction: column; background: var(--view); }
+.player-model { flex: 1; display: grid; place-items: center; position: relative; padding-top: var(--pad-panel); min-height: 240px; }
+.player-model::after {
+  content: ""; position: absolute; left: 50%; bottom: 14px; width: 120px; height: 18px; translate: -50% 0; z-index: -1;
+  border-radius: 50%; background: radial-gradient(closest-side, rgb(0 0 0 / 0.55), transparent);
+}
+.player-name {
+  display: flex; flex-direction: column; align-items: center; gap: var(--space-unit); width: 100%;
+  padding: var(--pad-callout); padding-bottom: var(--pad-panel); text-align: center; border-top: 1px solid rgb(255 255 255 / 0.06);
+  transition: background var(--soft) var(--butter);
+}
+button.player-name:hover { background: var(--card); }
+.player-name strong { font-size: 14px; font-weight: 500; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.player-name span { font-size: 11px; color: var(--muted); }
+.player-name :global(button) { margin-top: var(--space-label); }
+
+/* Worlds: rows, each one click from playing. */
+.worlds { display: flex; flex-direction: column; gap: var(--space-unit); margin: 0 calc(-1 * var(--pad-list)); }
+.world { display: flex; align-items: center; gap: var(--space-content); padding: var(--pad-list); border-radius: var(--r-sm); transition: background var(--soft) var(--butter); }
+.world:hover { background: var(--card); }
+.world > :first-child { width: 40px; height: 40px; }
+.world-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--space-unit); }
+.world-text strong { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.world-text span { font-size: 11px; color: var(--muted); }
+
+/* Details: a spec sheet, keys left, values right on tabular figures. */
+.spec { margin: 0; display: flex; flex-direction: column; }
+.spec > div { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-group); padding: 7px 0; font-size: 12px; }
+.spec > div + div { border-top: 1px solid rgb(255 255 255 / 0.06); }
+.spec dt { color: var(--muted); flex-shrink: 0; }
+.spec dd { margin: 0; min-width: 0; text-align: right; font-variant-numeric: tabular-nums; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Patch notes: newest first, the rest recede. */
+.news { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.news li { display: flex; flex-direction: column; gap: var(--space-unit); padding: var(--space-sibling) 0; color: var(--muted); }
+.news li + li { border-top: 1px solid rgb(255 255 255 / 0.06); }
+.news li:first-child { color: var(--fg); padding-top: 0; }
+.news li > span { font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.news-date { font-size: 11px; color: var(--subtle); font-variant-numeric: tabular-nums; }
+.news-empty { margin: 0; font-size: 12px; color: var(--muted); }
+
+/* A switch re-stages: the screenshot settles out of a push-in, the instance tiles rise in turn. */
+.restage .stage-bg { animation: stage-push 900ms var(--butter) backwards; }
+@keyframes stage-push { from { transform: scale(1.04); filter: saturate(0.9) brightness(1.08); } }
+.restage .stage-body > * { animation: rise var(--slow) var(--butter) backwards; }
+.restage .stage-body > :nth-child(2) { animation-delay: 40ms; }
+.restage .stage-body > :nth-child(3) { animation-delay: 80ms; }
+.restage > .worlds-pane { animation: rise var(--slow) var(--butter) 80ms backwards; }
+.restage > .spec-pane { animation: rise var(--slow) var(--butter) 120ms backwards; }
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } }
+@media (prefers-reduced-motion: reduce) {
+  .stage-bg, .restage .stage-bg, .restage .stage-body > *, .restage > .pane { animation: none; }
+}
+
+@media (max-width: 1100px) {
+  .stage { grid-column: span 7; }
+  .player { grid-column: span 5; }
+  .worlds-pane, .spec-pane { grid-column: span 6; }
+  .news-pane { grid-column: span 12; }
+}
+@media (max-width: 760px) {
+  .stage, .player, .worlds-pane, .spec-pane, .news-pane { grid-column: span 12; }
+}
 
 .section { padding: var(--space-group) var(--page-x) var(--space-sibling); }
 .tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-content); }
@@ -42,12 +129,6 @@
 .tile-sub { display: block; font-size: 11px; color: var(--muted); margin-top: var(--space-unit); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .add { border-style: dashed; background: rgb(255 255 255 / 0.02); }
 
-.news { border-radius: 16px; background: rgb(99 99 102 / 0.08); border: 1px solid var(--card-border); box-shadow: var(--highlight); overflow: hidden; }
-.news-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-group); padding: var(--pad-callout); color: var(--muted); }
-.news-row + .news-row { border-top: 1px solid rgb(255 255 255 / 0.06); }
-.news-row:first-child { color: var(--fg); }
-.news-title { display: flex; align-items: center; gap: var(--space-sibling); min-width: 0; }
-.news-title span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .dock {
   position: fixed; left: var(--sidebar-w); right: 0; bottom: 0; height: var(--dock-h); z-index: 40;
@@ -113,5 +194,3 @@
 @media (max-width: 1100px) {
   .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-.news-dot { background: rgb(255 255 255 / 0.2); }
-.news-row:first-child .news-dot { background: var(--accent); }

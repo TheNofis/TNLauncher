@@ -82,7 +82,7 @@ export function Worlds({ instance }: { instance: Instance }) {
   );
 }
 
-function WorldIcon({ instanceId, world: w }: { instanceId: string; world: World }) {
+export function WorldIcon({ instanceId, world: w }: { instanceId: string; world: World }) {
   const src = useBlobUrl(w.icon ? `${instanceId}/${w.folder}/${w.played}` : null, () => launcher.worldIcon(instanceId, w.folder));
   return <span className={s.icon}>{src ? <img src={src} alt="" /> : <Icon name="public" />}</span>;
 }
