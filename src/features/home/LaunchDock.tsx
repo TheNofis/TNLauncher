@@ -24,7 +24,6 @@ function DockInstance() {
   const inst = useSelectedInstance();
   const select = useLauncher((st) => st.select);
   const ramMb = useLauncher((st) => st.snapshot?.settings.ramMb ?? 0);
-  const navigate = useUi((st) => st.navigate);
   const instances = useRecentInstances();
   const ramGb = +(ramMb / 1024).toFixed(1);
   if (!inst) return <div className={s.dockLeft} />;
@@ -38,7 +37,7 @@ function DockInstance() {
           <span className={s.cardSub}>{inst.version} · {LOADERS[inst.loader]}{ramGb > 0 && ` · ${ramGb} GB`}</span>
         </span>
       </Select>
-      <IconButton icon="terminal" label="Open console" onClick={() => navigate("console")} />
+      <IconButton icon="article" label="Open logs" onClick={() => openInstanceTab(inst.id, "logs")} />
     </div>
   );
 }
@@ -54,7 +53,6 @@ function DockAction() {
   const loaded = useLauncher((st) => st.snapshot !== null);
   const hasInstances = useLauncher((st) => !!st.snapshot?.instances.length);
   const progress = useProgress();
-  const navigate = useUi((st) => st.navigate);
   const openNewInstance = useUi((st) => st.openNewInstance);
   const stopping = useGameStopping(inst?.id);
   const [stopError, setStopError] = useState<string | null>(null);
@@ -124,7 +122,7 @@ function DockAction() {
               {t.title}
             </Button>
           ))}
-          <IconButton icon="article" label="Open log" onClick={() => navigate("console")} />
+          {inst && <IconButton icon="article" label="Open logs" onClick={() => openInstanceTab(inst.id, "logs")} />}
           <IconButton icon="close" label="Dismiss" onClick={dismiss} />
         </div>
       ) : (

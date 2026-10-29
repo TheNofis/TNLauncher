@@ -5,7 +5,7 @@ import type { ContentKind } from "@/types";
 import { preloadView } from "@/views";
 
 /** `plugin:<plugin id>:<page id>` = a page a plugin contributes. */
-export type View = "home" | "profiles" | "instances" | "modpacks" | "console" | "plugins" | "settings" | `plugin:${string}:${string}`;
+export type View = "home" | "profiles" | "instances" | "modpacks" | "plugins" | "settings" | `plugin:${string}:${string}`;
 
 /** Summary of a content item (mod, resource pack, shader) opened on its detail page. */
 export interface ContentTarget {

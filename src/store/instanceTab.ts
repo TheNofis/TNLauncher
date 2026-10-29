@@ -1,13 +1,13 @@
-// Opens an instance page on one of its plugin tabs: header buttons and the launch dock's crash notice send the user there.
+// Opens an instance page on one of its tabs: header buttons, log shortcuts and the launch dock's crash notice send the user there.
 import { create } from "zustand";
 import { useUi } from "./UiContext";
 
-/** `plugin:<id>:<tab>`, the key `InstanceContent` keeps plugin tabs under. */
-export type PluginTabKey = `plugin:${string}:${string}`;
+/** `logs`, or `plugin:<id>:<tab>`, the key `InstanceContent` keeps plugin tabs under. */
+export type InstanceTabKey = "logs" | `plugin:${string}:${string}`;
 
-const useFocus = create<{ instance: string; tab: PluginTabKey } | { instance: null; tab: null }>(() => ({ instance: null, tab: null }));
+const useFocus = create<{ instance: string; tab: InstanceTabKey } | { instance: null; tab: null }>(() => ({ instance: null, tab: null }));
 
-export function openInstanceTab(instance: string, tab: PluginTabKey) {
+export function openInstanceTab(instance: string, tab: InstanceTabKey) {
   useFocus.setState({ instance, tab });
   useUi.getState().navigate("instances", { instance });
 }

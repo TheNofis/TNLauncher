@@ -10,7 +10,6 @@ const LOADERS: Record<Lazy, () => Promise<ComponentType>> = {
   profiles: () => import("@/features/profiles/ProfilesView").then((m) => m.ProfilesView),
   instances: () => import("@/features/instances/InstancesView").then((m) => m.InstancesView),
   modpacks: () => import("@/features/modpacks/ModpacksView").then((m) => m.ModpacksView),
-  console: () => import("@/features/console/ConsoleView").then((m) => m.ConsoleView),
   plugins: () => import("@/features/plugins/PluginsView").then((m) => m.PluginsView),
   settings: () => import("@/features/settings/SettingsView").then((m) => m.SettingsView),
 };

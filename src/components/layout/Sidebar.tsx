@@ -12,7 +12,6 @@ const NAV: { view: View; icon: string; label: string }[] = [
   { view: "profiles", icon: "badge", label: "Profiles" },
   { view: "instances", icon: "layers", label: "Instances" },
   { view: "modpacks", icon: "inventory_2", label: "Modpacks" },
-  { view: "console", icon: "terminal", label: "Console" },
   { view: "plugins", icon: "extension", label: "Plugins" },
   { view: "settings", icon: "tune", label: "Settings" },
 ];

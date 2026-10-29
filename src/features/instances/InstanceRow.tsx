@@ -4,7 +4,7 @@ import { Button, Chip, ConfirmDialog, Dialog, Dot, Icon, IconButton, Input, Menu
 import { cx } from "@/lib/cx";
 import { errorMessage, lastPlayed, LOADER_ICON, loaderLabel, playTime, plural } from "@/lib/format";
 import { useLauncher } from "@/store/LauncherContext";
-import { useUi } from "@/store/UiContext";
+import { openInstanceTab } from "@/store/instanceTab";
 import type { Instance } from "@/types";
 import s from "./instances.module.css";
 
@@ -30,8 +30,6 @@ export const InstanceRow = memo(function InstanceRow({ instance: i, groups, onOp
   const modCount = useLauncher((st) => st.snapshot?.modCounts[i.id] ?? 0);
   const launch = useLauncher((st) => st.launch);
   const refresh = useLauncher((st) => st.refresh);
-  const select = useLauncher((st) => st.select);
-  const navigate = useUi((st) => st.navigate);
   const [editing, setEditing] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [grouping, setGrouping] = useState(false);
@@ -112,12 +110,12 @@ export const InstanceRow = memo(function InstanceRow({ instance: i, groups, onOp
         <Button icon="play_arrow" loading={starting} disabled={running || busy} onClick={() => launch(i.id)}>
           {running ? "Running" : starting ? "Starting" : "Launch"}
         </Button>
-        {running && <IconButton icon="terminal" label="Console" onClick={() => (select(i.id), navigate("console"))} />}
+        {running && <IconButton icon="article" label="Logs" onClick={() => openInstanceTab(i.id, "logs")} />}
         <Menu
           label={`${i.name} actions`}
           items={[
             { icon: "folder_open", label: "Open folder", onSelect: () => run(() => launcher.openInstanceDir(i.id)) },
-            ...(running ? [] : [{ icon: "terminal", label: "Console", onSelect: () => (select(i.id), navigate("console")) }]),
+            ...(running ? [] : [{ icon: "article", label: "Logs", onSelect: () => openInstanceTab(i.id, "logs") }]),
             { icon: "edit", label: "Rename", divide: true, onSelect: () => setEditing(true) },
             { icon: "content_copy", label: "Duplicate", onSelect: () => run(() => launcher.copyInstance(i.id).then((c) => toast(`Copied as ${c.name}`, "info", "content_copy"))) },
             { icon: "folder", label: "Move to group…", onSelect: () => setGrouping(true) },

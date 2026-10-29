@@ -2,7 +2,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useMemo, useRef } from "react";
 import { create } from "zustand";
 import { sources, type Hit, type ProjectKind, type SourceInfo } from "@/api/sources";
-import type { PluginTabKey } from "@/store/instanceTab";
+import type { InstanceTabKey } from "@/store/instanceTab";
 
 export const usePlugins = () => useQuery({ queryKey: ["plugins"], queryFn: sources.listPlugins, staleTime: Infinity });
 
@@ -69,7 +69,7 @@ export function usePluginTabs(where: "header" | "crash") {
     () =>
       (plugins ?? [])
         .filter((p) => p.enabled && !p.error)
-        .flatMap((p) => p.instanceTabs.filter((t) => t[where]).map((t) => ({ key: `plugin:${p.id}:${t.id}` as PluginTabKey, title: t.title, icon: t.icon }))),
+        .flatMap((p) => p.instanceTabs.filter((t) => t[where]).map((t) => ({ key: `plugin:${p.id}:${t.id}` as InstanceTabKey, title: t.title, icon: t.icon }))),
     [plugins, where]
   );
 }

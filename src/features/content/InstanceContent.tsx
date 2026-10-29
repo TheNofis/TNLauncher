@@ -4,6 +4,7 @@ import { launcher } from "@/api/launcher";
 import { sources, type Hit, type SourceInfo } from "@/api/sources";
 import { Banner, Button, Chip, ConfirmDialog, EmptyState, Icon, IconButton, Pill, PillGroup, SearchInput, Select, Skeleton, Switch, Tab, Tabs, toast } from "@/components/ui";
 import { InstanceSettingsPane } from "@/features/instances/InstanceSettings";
+import { Logs } from "@/features/logs/Logs";
 import { Screenshots } from "@/features/screenshots/Screenshots";
 import { Worlds } from "@/features/worlds/Worlds";
 import { useDebounced } from "@/hooks/useDebounced";
@@ -61,11 +62,11 @@ const IRIS = { source: "modrinth", project: "YL57xq9U" };
 export function InstanceContent({ instance }: { instance: Instance }) {
   const modded = instance.loader !== "vanilla";
   // `plugin:<id>:<tab>` = a tab a plugin contributes.
-  const [tab, setTab] = useRouteState<ContentKind | "worlds" | "screenshots" | "settings" | `plugin:${string}`>("instance.tab", modded ? "mod" : "resourcepack");
-  const kind = tab === "worlds" || tab === "screenshots" || tab === "settings" || tab.startsWith("plugin:") ? "mod" : (tab as ContentKind);
+  const [tab, setTab] = useRouteState<ContentKind | "worlds" | "screenshots" | "logs" | "settings" | `plugin:${string}`>("instance.tab", modded ? "mod" : "resourcepack");
+  const kind = tab === "worlds" || tab === "screenshots" || tab === "logs" || tab === "settings" || tab.startsWith("plugin:") ? "mod" : (tab as ContentKind);
   const pluginTabs = (usePlugins().data ?? []).filter((p) => p.enabled).flatMap((p) => p.instanceTabs.map((t) => ({ plugin: p, tab: t, key: `plugin:${p.id}:${t.id}` as const })));
   const openPluginTab = pluginTabs.find((t) => t.key === tab);
-  // A header button or the crash notice asked for a plugin tab.
+  // A header button, the crash notice or a console shortcut asked for a tab.
   const focus = useInstanceTabFocus(instance.id);
   useEffect(() => {
     if (!focus) return;
@@ -122,6 +123,9 @@ export function InstanceContent({ instance }: { instance: Instance }) {
           <Tab selected={tab === "screenshots"} onSelect={() => setTab("screenshots")} icon="photo_camera">
             Screenshots
           </Tab>
+          <Tab selected={tab === "logs"} onSelect={() => setTab("logs")} icon="article">
+            Logs
+          </Tab>
           <Tab selected={tab === "settings"} onSelect={() => setTab("settings")} icon="tune">
             Settings
           </Tab>
@@ -149,6 +153,8 @@ export function InstanceContent({ instance }: { instance: Instance }) {
           <Worlds instance={instance} />
         ) : tab === "screenshots" ? (
           <Screenshots instanceId={instance.id} />
+        ) : tab === "logs" ? (
+          <Logs instanceId={instance.id} />
         ) : needsLoader ? (
           <EmptyState icon={KINDS[kind].icon}>
             Vanilla can't load {KINDS[kind].noun}. Create a modded instance to use them.
